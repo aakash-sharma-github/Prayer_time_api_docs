@@ -2,3 +2,25 @@
 
 azanAPI calculates Fajr, Sunrise, Dhuhr, Asr, Sunset, Maghrib, and Isha for explicit
 coordinates, timezone, date, and calculation configuration.
+
+## What is calculated
+
+The calculation engine produces timezone-aware astronomical values internally. The
+API formats them at its boundary as local `HH:MM` strings. `sunset` is an astronomical
+solar event; `maghrib` is the calculated prayer time, so both values are intentionally
+included even when they display the same minute.
+
+## What clients configure
+
+- [Calculation method](/concepts/calculation-methods) selects the regional or
+  organizational convention.
+- [Madhab](/concepts/madhab) determines the Asr calculation setting.
+- [High-latitude rule](/concepts/high-latitude-rules) handles exceptional twilight
+  conditions.
+- [Timezone](/concepts/timezones) determines the requested local date and display
+  times.
+- [Azan adjustments](/concepts/azan-adjustments) apply optional final minute offsets
+  without altering the calculation.
+
+The single-date endpoint returns one configured local day. The range endpoint repeats
+that calculation independently for every date in an inclusive range.

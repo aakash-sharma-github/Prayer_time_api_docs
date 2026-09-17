@@ -1,4 +1,35 @@
-# Docker
+# Deployment
 
-azanAPI provides a production Docker image foundation. This page will later contain
-deployment instructions without mixing deployment concerns into API documentation.
+azanAPI includes a production Docker image that runs the FastAPI application as a
+non-root user, exposes port `8000`, logs to standard output, and probes the real
+`GET /health` endpoint.
+
+## Build and run locally
+
+From the API repository root:
+
+```bash
+docker build -t azanapi:latest .
+docker run --rm -p 8000:8000 -e LOG_LEVEL=INFO azanapi:latest
+```
+
+Verify from another terminal:
+
+```bash
+curl http://127.0.0.1:8000/health
+curl "http://127.0.0.1:8000/api/v1/prayer-times?latitude=25.2048&longitude=55.2708&timezone=Asia/Dubai&date=2026-09-15&calculation_method=dubai"
+```
+
+For a long-running test container, use a name and inspect its health and logs:
+
+```bash
+docker run -d --name azanapi-test -p 8000:8000 azanapi:latest
+docker inspect --format='{{json .State.Health}}' azanapi-test
+docker logs azanapi-test
+docker stop azanapi-test
+docker rm azanapi-test
+```
+
+The container provides HTTP only. Put it behind a managed platform or a reverse proxy
+before exposing it to the public internet. See [Render](/deployment/render) for a
+managed deployment path and [VPS](/deployment/vps) for a self-managed path.

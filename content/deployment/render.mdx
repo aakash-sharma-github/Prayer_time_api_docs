@@ -1,3 +1,44 @@
 # Render
 
-Render deployment is intentionally out of scope for the documentation foundation.
+Render can build and deploy the API Dockerfile as a Web Service. Its Web Services must
+listen on `0.0.0.0`; azanAPI's container already does so on port `8000`.
+
+## Deploy from the API repository
+
+1. Push the API repository, including `Dockerfile`, to GitHub.
+2. In Render, choose **New** then **Web Service** and connect that repository.
+3. Set the runtime/language to **Docker** so Render builds the repository Dockerfile.
+4. Use the default Docker command; it runs the Dockerfile's Uvicorn `CMD`.
+5. Set the service health-check path to `/health`.
+6. Add environment variables only when needed:
+
+   ```text
+   APP_NAME=Prayer Timing API
+   APP_VERSION=0.1.0
+   APP_ENVIRONMENT=production
+   APP_DEBUG=false
+   LOG_LEVEL=INFO
+   ```
+
+7. Deploy and call `<your-service>.onrender.com/health` before using a prayer-times
+   endpoint.
+
+Render supports Dockerfile builds, and its Web Services can use HTTP health checks to
+delay traffic until the service is ready. [Render Docker documentation](https://render.com/docs/docker)
+and [Render health-check documentation](https://render.com/docs/health-checks) cover
+the current dashboard settings.
+
+## Verify after deploy
+
+```bash
+curl https://YOUR_SERVICE.onrender.com/health
+curl --get https://YOUR_SERVICE.onrender.com/api/v1/prayer-times \
+  --data-urlencode latitude=25.2048 \
+  --data-urlencode longitude=55.2708 \
+  --data-urlencode timezone=Asia/Dubai \
+  --data-urlencode calculation_method=dubai
+```
+
+Do not expose an unauthenticated development server directly. This API currently has
+no built-in authentication or rate limiting, so decide intentionally whether a public
+endpoint fits your use case.

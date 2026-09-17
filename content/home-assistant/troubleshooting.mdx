@@ -1,3 +1,51 @@
 # Troubleshooting
 
-This page will cover network availability, timezone alignment, and API validation errors.
+## The REST sensor is unavailable
+
+Verify the API from the Home Assistant host, not only from your development machine:
+
+```bash
+curl http://API_HOST:8000/health
+```
+
+If Home Assistant and azanAPI are in different containers, `127.0.0.1` points back to
+the Home Assistant container. Use a reachable LAN address, DNS name, or Docker network
+hostname instead. Check the service's port, firewall, and container logs.
+
+## The API returns 400 or 422
+
+`400` means the parameters were structurally valid but calculation could not proceed.
+For example, check that `timezone` is a real IANA timezone such as `Asia/Dubai`, not
+an offset or display label. Read `error.code` and `error.message` in the JSON body.
+
+`422` means one or more parameters failed validation. Confirm:
+
+- latitude is between `-90` and `90`;
+- longitude is between `-180` and `180`;
+- a date is `YYYY-MM-DD`;
+- calculation method, Madhab, and high-latitude rule use documented values; and
+- adjustments are whole integers from `-1440` to `1440`.
+
+The `error.details` array identifies each failed query field.
+
+## Automations fire at the wrong time
+
+Use the same timezone in Home Assistant and in the `timezone` query parameter. The
+API returns a local, time-only `HH:MM` string. Schedule with `azan_times`, not
+`calculated_times`, when you configured adjustments. Avoid adjustments that roll past
+midnight unless your automation explicitly handles the next/previous date.
+
+## Template errors or missing values
+
+Check that the source REST entity has populated attributes in **Developer Tools →
+States** before referencing it from a template. Inspect the real entity ID—Home
+Assistant can add suffixes such as `_2` when a name already exists. Template entities
+update when referenced source entities change, as described in the official
+[Template integration documentation](https://www.home-assistant.io/integrations/template/).
+
+## No notification or device action
+
+First replace actions with `persistent_notification.create` and confirm the template
+trigger matches. Then select the correct notification, media-player, light, or other
+service for your installation. The example automation is intentionally generic and
+does not assume a particular device.

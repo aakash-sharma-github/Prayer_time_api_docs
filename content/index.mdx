@@ -5,18 +5,32 @@ description: A REST API for calculating Islamic prayer times.
 
 # azanAPI
 
-A REST API for calculating Islamic prayer times.
+A stateless REST API for calculating Islamic prayer times from explicit location and
+calculation settings. It is designed for Home Assistant and general developer use.
 
-Accurate prayer-time calculations with configurable calculation methods, Madhab
-settings, timezones, high-latitude rules, and Azan adjustments.
+The API calculates Fajr, Sunrise, Dhuhr, Asr, Sunset, Maghrib, and Isha using
+coordinates, an IANA timezone, a local date, a calculation method, Madhab, and a
+high-latitude rule. It can also produce separately adjusted final Azan times without
+changing the underlying astronomical calculation.
 
 ## Start here
 
 - [Get started](/getting-started)
 - [API reference](/api-reference)
+- [Core concepts](/concepts)
+- [Examples](/examples)
+- [Home Assistant](/home-assistant)
 
-## Documentation foundation
+## Key design choices
 
-This site establishes the public documentation architecture for azanAPI. The API
-reference will be derived from the FastAPI OpenAPI contract, while the guides explain
-how and why to use the API.
+- **Explicit timezone:** the API never guesses one from coordinates.
+- **Stable v1 contract:** prayer endpoints are versioned under `/api/v1/`.
+- **Calculated versus Azan times:** astronomical values are immutable; optional
+  per-prayer offsets apply only to final Azan values.
+- **No database:** every request contains the configuration needed to calculate its
+  response.
+- **OpenAPI source of truth:** `/openapi.json` and `/docs` define endpoint structure,
+  while these guides explain how to use it.
+
+Start with a [first API request](/getting-started/first-api-request), then see the
+[prayer-times endpoint](/api-reference/prayer-times) for the full v1 contract.

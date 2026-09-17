@@ -27,3 +27,7 @@ template:
 Replace `API_HOST` and all sample parameters. The REST sensor polls hourly, which is
 enough for daily schedules and avoids unnecessary per-minute API calls. Verify exact
 entity IDs in Home Assistant Developer Tools after reloading configuration.
+
+The YAML uses Home Assistant's REST and Template integrations. Consult the official
+[RESTful integration](https://www.home-assistant.io/integrations/rest/) when adapting
+authentication, headers, update intervals, or availability behavior.

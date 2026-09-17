@@ -1,3 +1,42 @@
 # VPS
 
-VPS deployment guidance is intentionally out of scope for the documentation foundation.
+A VPS deployment keeps the API container private behind a reverse proxy. The intended
+shape is:
+
+```text
+Internet -> DNS -> HTTPS reverse proxy -> Docker -> azanAPI
+```
+
+## Prepare the host
+
+- Point your API DNS name to the VPS public IP.
+- Allow inbound TCP ports `80` and `443` at the provider firewall and host firewall.
+- Install Docker using your distribution's supported Docker installation method.
+- Build or pull the azanAPI image, then run it bound only to the loopback interface:
+
+```bash
+docker build -t azanapi:latest .
+docker run -d --restart unless-stopped --name azanapi \
+  -p 127.0.0.1:8000:8000 \
+  -e APP_ENVIRONMENT=production \
+  -e APP_DEBUG=false \
+  -e LOG_LEVEL=INFO \
+  azanapi:latest
+```
+
+Confirm it before configuring the proxy:
+
+```bash
+curl http://127.0.0.1:8000/health
+docker logs azanapi
+```
+
+## Put HTTPS in front
+
+Use a reverse proxy such as Caddy. It terminates public HTTPS and forwards requests
+to the container's private loopback port. See the [HTTPS guide](/deployment/https)
+for a minimal Caddyfile.
+
+Keep port `8000` off the public network. Back up configuration, monitor container
+health/logs, and update by building a new image then replacing the container only
+after verifying `/health`.

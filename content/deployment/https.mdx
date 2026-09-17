@@ -1,3 +1,31 @@
 # HTTPS
 
-HTTPS deployment guidance is intentionally out of scope for the documentation foundation.
+For a VPS, use a reverse proxy to terminate TLS rather than adding TLS configuration
+to Uvicorn. Caddy is a concise option because it can obtain and renew certificates
+automatically when DNS points to the server and ports `80` and `443` are reachable.
+
+Create `/etc/caddy/Caddyfile`:
+
+```caddyfile
+api.example.com {
+    reverse_proxy 127.0.0.1:8000
+}
+```
+
+Replace `api.example.com` with your real hostname, validate the configuration, then
+reload Caddy using the commands appropriate to your Caddy installation. Verify:
+
+```bash
+curl -I https://api.example.com/health
+curl https://api.example.com/health
+```
+
+Caddy automatically manages certificates and redirects HTTP to HTTPS for eligible
+hostnames. Your DNS must point at the host and the public ports must reach Caddy.
+See Caddy's [automatic HTTPS documentation](https://caddyserver.com/docs/automatic-https)
+and [reverse-proxy quick start](https://caddyserver.com/docs/quick-starts/reverse-proxy)
+for operational detail.
+
+Use HTTPS for public clients, especially Home Assistant instances outside the same
+trusted LAN. Certificate issuance, DNS, firewall configuration, and reverse-proxy
+maintenance are deployment responsibilities, not API configuration.
