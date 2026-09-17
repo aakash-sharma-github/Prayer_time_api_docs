@@ -1,3 +1,30 @@
 # Python
 
-Python request examples will be added in a later documentation-content phase.
+This standard-library example needs no HTTP dependency:
+
+```python
+from json import loads
+from urllib.parse import urlencode
+from urllib.request import urlopen
+
+params = urlencode(
+    {
+        "latitude": 25.2048,
+        "longitude": 55.2708,
+        "timezone": "Asia/Dubai",
+        "date": "2026-09-15",
+        "calculation_method": "dubai",
+        "fajr_adjustment": 2,
+    }
+)
+
+with urlopen(f"http://127.0.0.1:8000/api/v1/prayer-times?{params}") as response:
+    payload = loads(response.read())
+
+print(payload["calculated_times"]["fajr"])
+print(payload["azan_times"]["fajr"])
+```
+
+For production clients, handle `HTTPError` and parse its JSON response so that
+`INVALID_TIMEZONE`, range errors, and `VALIDATION_ERROR` details can be presented
+clearly to users.

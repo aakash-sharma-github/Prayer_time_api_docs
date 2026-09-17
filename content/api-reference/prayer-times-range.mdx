@@ -1,4 +1,79 @@
 # Prayer Times Range
 
-`GET /api/v1/prayer-times/range` returns independently calculated, chronological
-results for an inclusive range of up to 366 local dates.
+`GET /api/v1/prayer-times/range` calculates independently computed, chronological
+results for an inclusive range of local dates.
+
+```text
+GET /api/v1/prayer-times/range
+```
+
+It accepts the same coordinates, timezone, calculation method, Madhab,
+high-latitude rule, and five Azan-adjustment parameters as the single-day endpoint.
+Replace `date` with required `start_date` and `end_date`, each in `YYYY-MM-DD`
+format.
+
+## Range rules
+
+- Both start and end dates are included.
+- `start_date` must be on or before `end_date`.
+- The maximum inclusive range is **366 dates**.
+- Days are returned from oldest to newest, with no sorting option.
+- Each local date is calculated separately; the range is not derived from a UTC
+  sequence.
+
+Example for 15–17 September returns three entries: 15, 16, and 17 September.
+
+```bash
+curl --get http://127.0.0.1:8000/api/v1/prayer-times/range \
+  --data-urlencode latitude=25.2048 \
+  --data-urlencode longitude=55.2708 \
+  --data-urlencode timezone=Asia/Dubai \
+  --data-urlencode start_date=2026-09-15 \
+  --data-urlencode end_date=2026-09-17 \
+  --data-urlencode calculation_method=dubai \
+  --data-urlencode isha_adjustment=10
+```
+
+## Response shape
+
+Shared request configuration appears once at the top level. Every `days` item has
+only the date and its calculated and final Azan times:
+
+```json
+{
+  "start_date": "2026-09-15",
+  "end_date": "2026-09-17",
+  "timezone": "Asia/Dubai",
+  "coordinates": { "latitude": 25.2048, "longitude": 55.2708 },
+  "calculation_method": "dubai",
+  "madhab": "shafi",
+  "high_latitude_rule": "middle_of_the_night",
+  "adjustments_minutes": { "fajr": 0, "dhuhr": 0, "asr": 0, "maghrib": 0, "isha": 10 },
+  "days": [
+    {
+      "date": "2026-09-15",
+      "calculated_times": { "fajr": "04:47", "sunrise": "06:01", "dhuhr": "12:17", "asr": "15:43", "sunset": "18:22", "maghrib": "18:25", "isha": "19:39" },
+      "azan_times": { "fajr": "04:47", "dhuhr": "12:17", "asr": "15:43", "maghrib": "18:25", "isha": "19:49" }
+    }
+  ]
+}
+```
+
+The displayed times above illustrate the response shape; exact values depend on the
+requested date and configuration.
+
+## Errors
+
+Reversed ranges return `400`:
+
+```json
+{
+  "error": {
+    "code": "INVALID_DATE_RANGE",
+    "message": "start_date must be on or before end_date"
+  }
+}
+```
+
+More than 366 dates return `400` with `DATE_RANGE_TOO_LARGE` and the message
+`Date range cannot exceed 366 days`. Invalid parameter values still use `422`.

@@ -1,4 +1,29 @@
 # Sensors
 
-This page will describe REST and template sensors for calculated prayer times and
-separately adjusted Azan times.
+Create one REST sensor for the full response, then derive individual template sensors
+from its attributes. This avoids repeating the same API call for every prayer.
+
+```yaml
+rest:
+  - resource: "http://API_HOST:8000/api/v1/prayer-times?latitude=25.2048&longitude=55.2708&timezone=Asia%2FDubai&calculation_method=dubai"
+    scan_interval: 3600
+    sensor:
+      - name: Prayer Times
+        value_template: "{{ value_json.date }}"
+        json_attributes:
+          - calculated_times
+          - azan_times
+          - adjustments_minutes
+          - timezone
+
+template:
+  - sensor:
+      - name: Prayer Fajr Azan
+        state: "{{ state_attr('sensor.prayer_times', 'azan_times')['fajr'] }}"
+      - name: Prayer Sunrise
+        state: "{{ state_attr('sensor.prayer_times', 'calculated_times')['sunrise'] }}"
+```
+
+Replace `API_HOST` and all sample parameters. The REST sensor polls hourly, which is
+enough for daily schedules and avoids unnecessary per-minute API calls. Verify exact
+entity IDs in Home Assistant Developer Tools after reloading configuration.

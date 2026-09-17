@@ -1,3 +1,22 @@
 # Automations
 
-This page will describe safe, generic examples that use final Azan-time entities.
+Use final `*_azan` entities for Azan automations. The example below creates a generic
+notification at Fajr without assuming a speaker, phone, or other device:
+
+```yaml
+automation:
+  - alias: Fajr Azan notification
+    trigger:
+      - platform: template
+        value_template: >-
+          {{ now().strftime('%H:%M') == states('sensor.prayer_fajr_azan') }}
+    action:
+      - service: persistent_notification.create
+        data:
+          title: Fajr
+          message: It is time for Fajr.
+```
+
+Template triggers using `now()` evaluate once per minute. Ensure Home Assistant and
+the API request use the same timezone. The API returns bare `HH:MM` values, so avoid
+adjustments that cross midnight for this time-only automation pattern.

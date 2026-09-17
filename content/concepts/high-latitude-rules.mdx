@@ -1,4 +1,17 @@
 # High Latitude Rules
 
 High-latitude rules determine how the calculation handles conditions where standard
-twilight-based times require adjustment.
+twilight-based times require adjustment. This most often affects Fajr and Isha in
+locations and seasons where twilight does not reach the usual angles.
+
+Supported values are:
+
+```text
+middle_of_the_night
+seventh_of_the_night
+twilight_angle
+```
+
+The default is `middle_of_the_night`. Set `high_latitude_rule` explicitly only when
+your chosen calculation convention requires a different rule. This option changes the
+astronomical calculation; it is not an Azan adjustment.

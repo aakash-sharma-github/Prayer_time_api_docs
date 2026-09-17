@@ -2,3 +2,10 @@
 
 Responses distinguish immutable `calculated_times` from final `azan_times`.
 `adjustments_minutes` records the offsets used to produce final Azan times.
+
+All returned times are local `HH:MM` strings in the requested timezone. A response
+also echoes the calculation date, coordinates, calculation method, Madhab, and
+high-latitude rule so clients can store or display the exact configuration used.
+
+Use `calculated_times` for astronomical display and `azan_times` for a configured
+call-to-prayer schedule. Sunrise and Sunset are available only in `calculated_times`.

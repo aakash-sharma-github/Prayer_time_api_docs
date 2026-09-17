@@ -1,3 +1,19 @@
 # Health
 
-`GET /health` reports whether the application is available.
+`GET /health` reports whether the application process is available. Use it for
+container health checks, load balancer checks, and simple deployment verification.
+
+```text
+GET /health
+```
+
+It takes no parameters and returns `200 OK`:
+
+```json
+{
+  "status": "healthy"
+}
+```
+
+This endpoint verifies application availability only. It does not calculate prayer
+times and is not a database, dependency, or readiness probe.

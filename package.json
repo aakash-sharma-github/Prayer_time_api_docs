@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "postinstall": "patch-package",
     "sync:openapi": "node scripts/sync-openapi.mjs"
   },
   "dependencies": {
@@ -20,6 +21,7 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "patch-package": "^8.0.1",
     "typescript": "^5.7.0"
   }
 }

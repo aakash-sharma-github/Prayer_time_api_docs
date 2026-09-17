@@ -1,4 +1,13 @@
 # Timezones
 
 Every request requires an explicit IANA timezone. azanAPI does not infer a timezone
-from geographic coordinates.
+from geographic coordinates. Use values such as `Asia/Dubai`, `America/New_York`,
+or `Europe/London`, not a UTC offset such as `+04:00`.
+
+The timezone determines the local date used for calculation and the local `HH:MM`
+times returned in the response. When `date` is omitted on the single-date endpoint,
+the API chooses today in this requested timezone.
+
+An unknown timezone returns `400` with `INVALID_TIMEZONE`. Supply the same timezone
+to azanAPI and to your scheduler or Home Assistant instance unless you intentionally
+perform timezone conversion in the client.

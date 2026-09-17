@@ -6,4 +6,8 @@ Use the versioned `GET /api/v1/prayer-times` endpoint for a single local date.
 curl "http://127.0.0.1:8000/api/v1/prayer-times?latitude=25.2048&longitude=55.2708&timezone=Asia/Dubai&calculation_method=dubai"
 ```
 
-The exact request and response contract will be supplied from the API OpenAPI schema.
+The request must include your own coordinates, IANA timezone, and method. The sample
+uses Dubai only as an example; it is not a server default.
+
+Successful calls return `200` with calculated and final Azan times. If a request is
+invalid, inspect the JSON `error` object rather than relying only on the HTTP status.

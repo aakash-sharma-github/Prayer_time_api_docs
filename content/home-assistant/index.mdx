@@ -2,3 +2,21 @@
 
 Home Assistant consumes azanAPI as a standard HTTP client. The API remains independent
 of Home Assistant and does not include a custom integration.
+
+Before adding YAML, verify the API from the Home Assistant host:
+
+```bash
+curl --get http://API_HOST:8000/api/v1/prayer-times \
+  --data-urlencode latitude=25.2048 \
+  --data-urlencode longitude=55.2708 \
+  --data-urlencode timezone=Asia/Dubai \
+  --data-urlencode calculation_method=dubai
+```
+
+Use a reachable LAN address, DNS name, or container hostname for `API_HOST`.
+`127.0.0.1` is usually incorrect when Home Assistant and azanAPI run in separate
+containers or hosts.
+
+The API timezone should match Home Assistant's configured timezone when using the
+time-only values in automations. Use `azan_times` for call-to-prayer scheduling and
+`calculated_times` for astronomical display.

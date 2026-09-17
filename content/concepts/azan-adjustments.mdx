@@ -2,3 +2,24 @@
 
 Azan adjustments apply whole-minute offsets only to final Azan times. They never
 modify astronomical calculated times, Sunrise, or Sunset.
+
+The adjustable prayers are Fajr, Dhuhr, Asr, Maghrib, and Isha. Each query parameter
+accepts an integer from `-1440` to `1440`; positive values make an Azan later and
+negative values make it earlier.
+
+```text
+calculated_times.fajr = 04:48
+fajr_adjustment       = +2
+azan_times.fajr       = 04:50
+```
+
+Use `fajr_adjustment`, `dhuhr_adjustment`, `asr_adjustment`,
+`maghrib_adjustment`, and `isha_adjustment`. All default to `0`.
+
+Sunrise and Sunset are astronomical events, not Azan prayers. They appear only in
+`calculated_times` and have no adjustment parameter.
+
+An offset may cross midnight. Arithmetic is performed with timezone-aware datetimes,
+but responses expose bare `HH:MM` values, so a rolled-over date is not represented in
+v1. Clients scheduling an event should avoid rollover-causing offsets or account for
+the date transition themselves.

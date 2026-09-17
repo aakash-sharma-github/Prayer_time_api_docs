@@ -1,3 +1,29 @@
 # JavaScript
 
-JavaScript request examples will be added in a later documentation-content phase.
+This example uses the built-in `fetch` available in modern browsers and current Node.js
+releases. Validate user-provided inputs before constructing a request.
+
+```js
+const apiUrl = new URL('http://127.0.0.1:8000/api/v1/prayer-times')
+apiUrl.search = new URLSearchParams({
+  latitude: '25.2048',
+  longitude: '55.2708',
+  timezone: 'Asia/Dubai',
+  date: '2026-09-15',
+  calculation_method: 'dubai',
+  madhab: 'shafi',
+  isha_adjustment: '10'
+})
+
+const response = await fetch(apiUrl)
+const payload = await response.json()
+
+if (!response.ok) {
+  throw new Error(`${payload.error.code}: ${payload.error.message}`)
+}
+
+console.log(payload.azan_times.isha)
+```
+
+For a date range, change the path to `/api/v1/prayer-times/range` and provide
+`start_date` and `end_date` instead of `date`.

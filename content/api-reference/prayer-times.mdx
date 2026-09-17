@@ -1,5 +1,83 @@
 # Prayer Times
 
-`GET /api/v1/prayer-times` returns prayer times for one requested local date.
+`GET /api/v1/prayer-times` calculates prayer and solar-event times for one local
+calendar date. The requested timezone determines both the local date and returned
+`HH:MM` values.
 
-Contract details will be rendered from the synchronized OpenAPI document.
+```text
+GET /api/v1/prayer-times
+```
+
+## Query parameters
+
+| Parameter | Required | Rules | Default |
+| --- | --- | --- | --- |
+| `latitude` | Yes | Decimal number from `-90` to `90` | — |
+| `longitude` | Yes | Decimal number from `-180` to `180` | — |
+| `timezone` | Yes | Valid IANA name, such as `Asia/Dubai` | — |
+| `date` | No | Gregorian `YYYY-MM-DD` | Today in the requested timezone |
+| `calculation_method` | Yes | A supported calculation method | — |
+| `madhab` | No | `shafi` or `hanafi` | `shafi` |
+| `high_latitude_rule` | No | See below | `middle_of_the_night` |
+| `fajr_adjustment` | No | Whole minutes from `-1440` to `1440` | `0` |
+| `dhuhr_adjustment` | No | Whole minutes from `-1440` to `1440` | `0` |
+| `asr_adjustment` | No | Whole minutes from `-1440` to `1440` | `0` |
+| `maghrib_adjustment` | No | Whole minutes from `-1440` to `1440` | `0` |
+| `isha_adjustment` | No | Whole minutes from `-1440` to `1440` | `0` |
+
+Supported `calculation_method` values are `muslim_world_league`, `egyptian`,
+`karachi`, `umm_al_qura`, `dubai`, `moon_sighting_committee`, `north_america`,
+`kuwait`, `qatar`, `singapore`, and `uoif`.
+
+Supported `high_latitude_rule` values are `middle_of_the_night`,
+`seventh_of_the_night`, and `twilight_angle`.
+
+## Example
+
+```bash
+curl --get http://127.0.0.1:8000/api/v1/prayer-times \
+  --data-urlencode latitude=25.2048 \
+  --data-urlencode longitude=55.2708 \
+  --data-urlencode timezone=Asia/Dubai \
+  --data-urlencode date=2026-09-15 \
+  --data-urlencode calculation_method=dubai \
+  --data-urlencode fajr_adjustment=2
+```
+
+## Successful response
+
+`200 OK` returns the configuration actually used, the unmodified astronomical values,
+the final Azan values, and the offsets applied:
+
+```json
+{
+  "date": "2015-07-12",
+  "timezone": "America/New_York",
+  "coordinates": { "latitude": 35.775, "longitude": -78.6336 },
+  "calculation_method": "north_america",
+  "madhab": "hanafi",
+  "high_latitude_rule": "middle_of_the_night",
+  "calculated_times": {
+    "fajr": "04:42", "sunrise": "06:08", "dhuhr": "13:21",
+    "asr": "18:22", "sunset": "20:32", "maghrib": "20:32", "isha": "21:57"
+  },
+  "azan_times": {
+    "fajr": "04:42", "dhuhr": "13:21", "asr": "18:22",
+    "maghrib": "20:32", "isha": "21:57"
+  },
+  "adjustments_minutes": {
+    "fajr": 0, "dhuhr": 0, "asr": 0, "maghrib": 0, "isha": 0
+  }
+}
+```
+
+`calculated_times` always has Fajr, Sunrise, Dhuhr, Asr, Sunset, Maghrib, and Isha.
+`azan_times` intentionally excludes Sunrise and Sunset because they are not Azan
+prayers. Adjustments never mutate `calculated_times`.
+
+## Errors
+
+An unknown but syntactically valid IANA timezone returns `400` with
+`INVALID_TIMEZONE`. Invalid coordinates, dates, enums, or adjustment bounds return
+the standard `422` validation envelope. See [API Reference](/api-reference) for the
+error schemas.

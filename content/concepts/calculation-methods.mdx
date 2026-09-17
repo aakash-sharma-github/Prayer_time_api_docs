@@ -1,4 +1,22 @@
 # Calculation Methods
 
-This page will explain the allowed calculation methods, when to select each one, and
-their effect on prayer-time results. The allowed values come from the v1 OpenAPI contract.
+The calculation method selects the convention used by the underlying prayer-time
+calculation engine. Choose the method used by your mosque, local authority, or
+community; azanAPI does not select one from coordinates.
+
+v1 accepts:
+
+```text
+muslim_world_league, egyptian, karachi, umm_al_qura, dubai,
+moon_sighting_committee, north_america, kuwait, qatar, singapore, uoif
+```
+
+Pass one value as `calculation_method`, for example:
+
+```text
+calculation_method=north_america
+```
+
+Methods can have their own built-in parameters and conventions. They are distinct
+from API Azan adjustments, which are optional post-calculation offsets reported
+separately in `adjustments_minutes`.

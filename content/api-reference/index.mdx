@@ -1,12 +1,70 @@
 # API Reference
 
-## API version
+azanAPI is a stateless JSON API. Prayer-time requests are `GET` requests and require
+explicit coordinates, an IANA timezone, and a calculation method. The service does
+not infer a location or timezone and does not store request data.
 
-This documentation targets **v1**. All public endpoints use the `/api/v1/` prefix.
+## Versioning
 
-## OpenAPI strategy
+The current public contract is **v1**. Its versioned prayer-time paths are:
 
-FastAPI remains the source of truth for parameters, schemas, constraints, defaults,
-and error responses. Run `npm run sync:openapi` against a local or deployed API to
-save its current schema at `public/openapi.json`. Future reference rendering will read
-that schema instead of manually duplicating the contract.
+- `GET /api/v1/prayer-times` — one local calendar date.
+- `GET /api/v1/prayer-times/range` — an inclusive range of up to 366 local dates.
+
+Breaking changes—such as removing a response field or changing a parameter's meaning,
+default, enum, range, or error envelope—require a new versioned path. Additive,
+backward-compatible changes may remain in v1.
+
+`GET /health` is an operational endpoint and is intentionally not versioned.
+
+## Base URL
+
+For local development, use `http://127.0.0.1:8000`. Replace it with the deployed API
+origin in production examples.
+
+## OpenAPI source of truth
+
+FastAPI generates the authoritative contract at `/openapi.json`; its interactive
+Swagger UI is available at `/docs`. This site explains the contract and provides
+examples, but it does not replace the schema.
+
+To copy the currently running API schema into this documentation project:
+
+```bash
+npm run sync:openapi
+```
+
+Set `OPENAPI_URL` when synchronizing from a deployed API. The saved schema is written
+to `public/openapi.json`.
+
+## Shared error envelope
+
+All application errors use a top-level `error` object with a stable `code` and a
+human-readable `message`:
+
+```json
+{
+  "error": {
+    "code": "INVALID_TIMEZONE",
+    "message": "Unknown IANA timezone: Not/ARealTimezone"
+  }
+}
+```
+
+Invalid query values return `422` and include one `details` item per invalid input:
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Request validation failed.",
+    "details": [
+      {
+        "field": "query.latitude",
+        "message": "Input should be less than or equal to 90",
+        "type": "less_than_equal"
+      }
+    ]
+  }
+}
+```
