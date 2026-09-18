@@ -7,7 +7,7 @@ community; azanAPI does not select one from coordinates.
 v1 accepts:
 
 ```text
-muslim_world_league, egyptian, karachi, umm_al_qura, dubai,
+muslim_world_league, egyptian, karachi, umm_al_qura, dubai, iacad_dubai,
 moon_sighting_committee, north_america, kuwait, qatar, singapore, uoif
 ```
 
@@ -20,3 +20,19 @@ calculation_method=north_america
 Methods can have their own built-in parameters and conventions. They are distinct
 from API Azan adjustments, which are optional post-calculation offsets reported
 separately in `adjustments_minutes`.
+
+## Dubai profiles
+
+`dubai` preserves the underlying adhanpy Dubai profile. `iacad_dubai` is an opt-in
+Dubai-specific profile validated against available official IACAD Dubai prayer-time
+reference data. It retains the Dubai calculation profile but uses an internal Asr
+method adjustment of `+1` minute rather than the standard Dubai profile's `+3`.
+
+This is a calculation-method choice:
+
+```text
+Calculation method → calculated_times → optional Azan adjustments → azan_times
+```
+
+`asr_adjustment` remains available for a client's own final Azan-time preference; it
+is not used to implement `iacad_dubai`.

@@ -26,8 +26,12 @@ GET /api/v1/prayer-times
 | `isha_adjustment` | No | Whole minutes from `-1440` to `1440` | `0` |
 
 Supported `calculation_method` values are `muslim_world_league`, `egyptian`,
-`karachi`, `umm_al_qura`, `dubai`, `moon_sighting_committee`, `north_america`,
+`karachi`, `umm_al_qura`, `dubai`, `iacad_dubai`, `moon_sighting_committee`, `north_america`,
 `kuwait`, `qatar`, `singapore`, and `uoif`.
+
+`iacad_dubai` is an opt-in Dubai profile validated against available official IACAD
+reference data. It differs from `dubai` only in its internal Asr method adjustment;
+it does not use or change the client-facing `asr_adjustment` parameter.
 
 Supported `high_latitude_rule` values are `middle_of_the_night`,
 `seventh_of_the_night`, and `twilight_angle`.
