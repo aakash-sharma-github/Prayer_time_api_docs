@@ -79,6 +79,10 @@ npm run start
 
 The project also runs `patch-package` after dependency installation to apply the included compatibility patch for Nextra.
 
+Search uses Pagefind. `npm run build` generates its index in `public/_pagefind/`,
+which is intentionally ignored by Git. Search is available from a production build;
+after rebuilding, restart `npm run dev` to test it locally.
+
 ## Project structure
 
 ```text

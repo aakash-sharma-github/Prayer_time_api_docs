@@ -7,5 +7,8 @@ const withNextra = nextra({
 })
 
 export default withNextra({
-  reactStrictMode: true
+  reactStrictMode: true,
+  experimental: {
+    useTypeScriptCli: false
+  }
 })
