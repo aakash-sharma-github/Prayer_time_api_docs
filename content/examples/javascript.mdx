@@ -4,13 +4,13 @@ This example uses the built-in `fetch` available in modern browsers and current 
 releases. Validate user-provided inputs before constructing a request.
 
 ```js
-const apiUrl = new URL('http://127.0.0.1:8000/api/v1/prayer-times')
+const apiUrl = new URL('https://api.aakashsharma.com.np/api/v1/prayer-times')
 apiUrl.search = new URLSearchParams({
   latitude: '25.2048',
   longitude: '55.2708',
   timezone: 'Asia/Dubai',
-  date: '2026-09-15',
-  calculation_method: 'dubai',
+  date: '2026-09-18',
+  calculation_method: 'iacad_dubai',
   madhab: 'shafi',
   isha_adjustment: '10'
 })
@@ -27,3 +27,6 @@ console.log(payload.azan_times.isha)
 
 For a date range, change the path to `/api/v1/prayer-times/range` and provide
 `start_date` and `end_date` instead of `date`.
+
+For local development, replace `https://api.aakashsharma.com.np` with
+`http://127.0.0.1:8000`.

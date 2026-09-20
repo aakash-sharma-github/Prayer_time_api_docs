@@ -3,11 +3,14 @@
 Use the versioned `GET /api/v1/prayer-times` endpoint for a single local date.
 
 ```bash
-curl "http://127.0.0.1:8000/api/v1/prayer-times?latitude=25.2048&longitude=55.2708&timezone=Asia/Dubai&calculation_method=dubai"
+curl "https://api.aakashsharma.com.np/api/v1/prayer-times?latitude=25.2048&longitude=55.2708&timezone=Asia/Dubai&date=2026-09-18&calculation_method=iacad_dubai"
 ```
 
 The request must include your own coordinates, IANA timezone, and method. The sample
 uses Dubai only as an example; it is not a server default.
+
+For a self-hosted development server, replace
+`https://api.aakashsharma.com.np` with `http://127.0.0.1:8000`.
 
 Successful calls return `200` with calculated and final Azan times. If a request is
 invalid, inspect the JSON `error` object rather than relying only on the HTTP status.

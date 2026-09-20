@@ -3,7 +3,7 @@
 ## Health
 
 ```bash
-curl http://127.0.0.1:8000/health
+curl https://api.aakashsharma.com.np/health
 ```
 
 ## One date
@@ -12,12 +12,12 @@ Use `--get` and `--data-urlencode` to encode IANA timezone names and query value
 safely:
 
 ```bash
-curl --get http://127.0.0.1:8000/api/v1/prayer-times \
+curl --get https://api.aakashsharma.com.np/api/v1/prayer-times \
   --data-urlencode latitude=25.2048 \
   --data-urlencode longitude=55.2708 \
   --data-urlencode timezone=Asia/Dubai \
-  --data-urlencode date=2026-09-15 \
-  --data-urlencode calculation_method=dubai \
+  --data-urlencode date=2026-09-18 \
+  --data-urlencode calculation_method=iacad_dubai \
   --data-urlencode madhab=shafi \
   --data-urlencode isha_adjustment=10
 ```
@@ -25,11 +25,11 @@ curl --get http://127.0.0.1:8000/api/v1/prayer-times \
 ## Date range
 
 ```bash
-curl --get http://127.0.0.1:8000/api/v1/prayer-times/range \
+curl --get https://api.aakashsharma.com.np/api/v1/prayer-times/range \
   --data-urlencode latitude=25.2048 \
   --data-urlencode longitude=55.2708 \
   --data-urlencode timezone=Asia/Dubai \
-  --data-urlencode start_date=2026-09-15 \
-  --data-urlencode end_date=2026-09-17 \
-  --data-urlencode calculation_method=dubai
+  --data-urlencode start_date=2026-09-18 \
+  --data-urlencode end_date=2026-09-20 \
+  --data-urlencode calculation_method=iacad_dubai
 ```

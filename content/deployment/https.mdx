@@ -1,8 +1,10 @@
 # HTTPS
 
-For a VPS, use a reverse proxy to terminate TLS rather than adding TLS configuration
-to Uvicorn. Caddy is a concise option because it can obtain and renew certificates
-automatically when DNS points to the server and ports `80` and `443` are reachable.
+For a self-hosted VPS, use a reverse proxy to terminate TLS rather than adding TLS
+configuration to Uvicorn. Caddy is a concise option because it can obtain and renew
+certificates automatically when DNS points to the server and ports `80` and `443` are
+reachable. This is not the current production architecture: the public API is served
+through the Cloudflare Worker behind `https://api.aakashsharma.com.np`.
 
 Create `/etc/caddy/Caddyfile`:
 
@@ -12,8 +14,8 @@ api.example.com {
 }
 ```
 
-Replace `api.example.com` with your real hostname, validate the configuration, then
-reload Caddy using the commands appropriate to your Caddy installation. Verify:
+Replace `api.example.com` with your self-hosted hostname, validate the configuration,
+then reload Caddy using the commands appropriate to your Caddy installation. Verify:
 
 ```bash
 curl -I https://api.example.com/health

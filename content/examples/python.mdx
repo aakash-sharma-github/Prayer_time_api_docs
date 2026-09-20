@@ -12,13 +12,13 @@ params = urlencode(
         "latitude": 25.2048,
         "longitude": 55.2708,
         "timezone": "Asia/Dubai",
-        "date": "2026-09-15",
-        "calculation_method": "dubai",
+        "date": "2026-09-18",
+        "calculation_method": "iacad_dubai",
         "fajr_adjustment": 2,
     }
 )
 
-with urlopen(f"http://127.0.0.1:8000/api/v1/prayer-times?{params}") as response:
+with urlopen(f"https://api.aakashsharma.com.np/api/v1/prayer-times?{params}") as response:
     payload = loads(response.read())
 
 print(payload["calculated_times"]["fajr"])
@@ -28,3 +28,6 @@ print(payload["azan_times"]["fajr"])
 For production clients, handle `HTTPError` and parse its JSON response so that
 `INVALID_TIMEZONE`, range errors, and `VALIDATION_ERROR` details can be presented
 clearly to users.
+
+For local development, replace `https://api.aakashsharma.com.np` with
+`http://127.0.0.1:8000`.

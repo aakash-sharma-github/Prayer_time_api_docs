@@ -5,7 +5,7 @@ from its attributes. This avoids repeating the same API call for every prayer.
 
 ```yaml
 rest:
-  - resource: "http://API_HOST:8000/api/v1/prayer-times?latitude=25.2048&longitude=55.2708&timezone=Asia%2FDubai&calculation_method=dubai"
+  - resource: "https://api.aakashsharma.com.np/api/v1/prayer-times?latitude=25.2048&longitude=55.2708&timezone=Asia%2FDubai&calculation_method=iacad_dubai"
     scan_interval: 3600
     sensor:
       - name: Prayer Times
@@ -24,9 +24,10 @@ template:
         state: "{{ state_attr('sensor.prayer_times', 'calculated_times')['sunrise'] }}"
 ```
 
-Replace `API_HOST` and all sample parameters. The REST sensor polls hourly, which is
-enough for daily schedules and avoids unnecessary per-minute API calls. Verify exact
-entity IDs in Home Assistant Developer Tools after reloading configuration.
+The example uses the production API. Replace the base URL and all sample parameters
+when calling a self-hosted instance. The REST sensor polls hourly, which is enough
+for daily schedules and avoids unnecessary per-minute API calls. Verify exact entity
+IDs in Home Assistant Developer Tools after reloading configuration.
 
 The YAML uses Home Assistant's REST and Template integrations. Consult the official
 [RESTful integration](https://www.home-assistant.io/integrations/rest/) when adapting

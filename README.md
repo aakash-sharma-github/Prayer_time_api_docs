@@ -4,6 +4,17 @@ This is the documentation website for [azanAPI](../README.md), a versioned REST 
 
 It contains practical guides, endpoint reference material, examples, Home Assistant instructions, and deployment guidance. The FastAPI application itself lives in the parent project; this directory contains no prayer-time calculation logic.
 
+## Production API
+
+The canonical public API base URL documented by this site is:
+
+```text
+https://api.aakashsharma.com.np
+```
+
+Public prayer endpoints use the `/api/v1` prefix. The Cloudflare Worker deployment
+URL is infrastructure only and is not the recommended client endpoint.
+
 ## Contents
 
 - Getting started and explanation of API responses
@@ -37,7 +48,7 @@ Copy `.env.example` to `.env.local` when you need local overrides.
 | Variable | Purpose | Default |
 | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Public canonical URL used for metadata, sitemap, and robots output. | `https://docs.example.com` in the example file |
-| `OPENAPI_URL` | FastAPI OpenAPI document used by the synchronization script. | `http://127.0.0.1:8000/openapi.json` |
+| `OPENAPI_URL` | FastAPI OpenAPI document used by the synchronization script. | `http://127.0.0.1:8000/openapi.json` for a local API; production is `https://api.aakashsharma.com.np/openapi.json` |
 
 `NEXT_PUBLIC_SITE_URL` is exposed to the browser. Do not place secrets in variables prefixed with `NEXT_PUBLIC_`.
 

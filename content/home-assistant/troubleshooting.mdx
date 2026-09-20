@@ -5,12 +5,13 @@
 Verify the API from the Home Assistant host, not only from your development machine:
 
 ```bash
-curl http://API_HOST:8000/health
+curl https://api.aakashsharma.com.np/health
 ```
 
 If Home Assistant and azanAPI are in different containers, `127.0.0.1` points back to
 the Home Assistant container. Use a reachable LAN address, DNS name, or Docker network
-hostname instead. Check the service's port, firewall, and container logs.
+hostname for a self-hosted API instead. Check the service's port, firewall, and
+container logs.
 
 ## The API returns 400 or 422
 

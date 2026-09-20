@@ -4,7 +4,18 @@ azanAPI includes a production Docker image that runs the FastAPI application as 
 non-root user, exposes port `8000`, logs to standard output, and probes the real
 `GET /health` endpoint.
 
-## Build and run locally
+## Current production API
+
+The public API is available at `https://api.aakashsharma.com.np`. It is deployed
+through the Cloudflare Worker named `azan-api`. Its Workers.dev address is deployment
+infrastructure and is not the recommended client base URL.
+
+```bash
+curl https://api.aakashsharma.com.np/health
+curl "https://api.aakashsharma.com.np/api/v1/prayer-times?latitude=25.2048&longitude=55.2708&timezone=Asia/Dubai&date=2026-09-18&calculation_method=iacad_dubai"
+```
+
+## Build and run locally or self-hosted
 
 From the API repository root:
 

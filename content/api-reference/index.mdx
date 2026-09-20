@@ -19,8 +19,9 @@ backward-compatible changes may remain in v1.
 
 ## Base URL
 
-For local development, use `http://127.0.0.1:8000`. Replace it with the deployed API
-origin in production examples.
+The canonical public API base URL is `https://api.aakashsharma.com.np`. All public
+examples on this site use that origin. For local development, use
+`http://127.0.0.1:8000` instead.
 
 ## OpenAPI source of truth
 
@@ -34,8 +35,8 @@ To copy the currently running API schema into this documentation project:
 npm run sync:openapi
 ```
 
-Set `OPENAPI_URL` when synchronizing from a deployed API. The saved schema is written
-to `public/openapi.json`.
+Set `OPENAPI_URL=https://api.aakashsharma.com.np/openapi.json` when synchronizing
+from the production API. The saved schema is written to `public/openapi.json`.
 
 ## Shared error envelope
 
