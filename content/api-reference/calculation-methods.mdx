@@ -1,0 +1,28 @@
+# Calculation Methods
+
+`GET /api/v1/calculation-methods` returns the exact calculation settings accepted by
+the installed v1 API. Clients can use it to populate configuration controls without
+inventing supported values.
+
+```text
+GET /api/v1/calculation-methods
+```
+
+## Response
+
+`200 OK` returns three enum lists:
+
+```json
+{
+  "calculation_methods": ["muslim_world_league", "egyptian", "iacad_dubai"],
+  "madhabs": ["shafi", "hanafi"],
+  "high_latitude_rules": [
+    "middle_of_the_night",
+    "seventh_of_the_night",
+    "twilight_angle"
+  ]
+}
+```
+
+The abbreviated array above illustrates the response shape. Use the endpoint's
+complete response as the source of supported values for a particular API deployment.

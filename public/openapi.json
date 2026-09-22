@@ -56,6 +56,28 @@
         }
       }
     },
+    "/api/v1/calculation-methods": {
+      "get": {
+        "tags": [
+          "Prayer times"
+        ],
+        "summary": "List supported prayer calculation settings",
+        "description": "Return the enums used to validate both prayer-time endpoints.",
+        "operationId": "get_calculation_methods_api_v1_calculation_methods_get",
+        "responses": {
+          "200": {
+            "description": "Calculation methods, Madhabs, and high-latitude rules accepted by v1.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalculationMethodsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/prayer-times": {
       "get": {
         "tags": [
@@ -617,6 +639,39 @@
           "uoif"
         ],
         "title": "CalculationMethodName"
+      },
+      "CalculationMethodsResponse": {
+        "properties": {
+          "calculation_methods": {
+            "items": {
+              "$ref": "#/components/schemas/CalculationMethodName"
+            },
+            "type": "array",
+            "title": "Calculation Methods"
+          },
+          "madhabs": {
+            "items": {
+              "$ref": "#/components/schemas/MadhabName"
+            },
+            "type": "array",
+            "title": "Madhabs"
+          },
+          "high_latitude_rules": {
+            "items": {
+              "$ref": "#/components/schemas/HighLatitudeRuleName"
+            },
+            "type": "array",
+            "title": "High Latitude Rules"
+          }
+        },
+        "type": "object",
+        "required": [
+          "calculation_methods",
+          "madhabs",
+          "high_latitude_rules"
+        ],
+        "title": "CalculationMethodsResponse",
+        "description": "The calculation settings accepted by the v1 prayer-time endpoints."
       },
       "CoordinatesResponse": {
         "properties": {
